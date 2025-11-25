@@ -1,0 +1,230 @@
+:root {
+  --bg-color: #121212;
+  --chat-bg: #000000; /* Darker black for better contrast on OLED screens */
+  --primary: #2563eb; /* A slightly deeper blue */
+  --search-color: #10b981;
+  --text-color: #ffffff;
+  --bot-msg-bg: #27272a;
+}
+
+* {
+  box-sizing: border-box; /* Ensures padding doesn't break layout */
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--chat-bg);
+  color: var(--text-color);
+  overscroll-behavior-y: none; /* Prevents "bounce" scroll on mobile */
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  /* 100dvh handles mobile address bars appearing/disappearing perfectly */
+  height: 100dvh; 
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: var(--chat-bg);
+}
+
+/* HEADER */
+.chat-header {
+  padding: 15px 20px;
+  background-color: #18181b; /* Zinc-900 */
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.chat-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* CHAT AREA */
+.chat-window {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--chat-bg);
+  /* Smooth momentum scrolling for iOS */
+  -webkit-overflow-scrolling: touch; 
+}
+
+.message {
+  display: flex;
+  width: 100%;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.bot {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 85%; /* Wider on mobile */
+  padding: 12px 16px;
+  border-radius: 18px; /* More rounded like iMessage */
+  font-size: 16px; /* 16px prevents iOS from zooming in when typing */
+  line-height: 1.5;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.message.user .message-content {
+  background-color: var(--primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.message.bot .message-content {
+  background-color: var(--bot-msg-bg);
+  color: #eee;
+  border-bottom-left-radius: 4px;
+}
+
+.web-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--search-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* INPUT AREA */
+.input-area {
+  padding: 10px 15px;
+  background-color: #18181b;
+  border-top: 1px solid #333;
+  position: relative;
+  /* Safe area for iPhone Home Bar */
+  padding-bottom: env(safe-area-inset-bottom, 15px); 
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #27272a;
+  border-radius: 25px; /* Pill shape */
+  padding: 5px;
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.input-wrapper.active-search {
+  border-color: var(--search-color);
+  background-color: #062c1e; /* Dark green tint */
+}
+
+input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px; /* Vital for Mobile Safari */
+  outline: none;
+  min-height: 44px; /* Minimum touch target height */
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; /* Circle button */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-left: 5px;
+  transition: transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* COMMAND MENU */
+.command-menu {
+  position: absolute;
+  bottom: 85px; /* Just above input */
+  left: 15px;
+  right: 15px; /* Full width minus padding */
+  background-color: #27272a;
+  border: 1px solid #444;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+  animation: slideUp 0.2s ease;
+  z-index: 100;
+}
+
+.command-item {
+  padding: 15px 20px; /* Big touch target */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.command-item:active {
+  background-color: var(--primary);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+/* SEARCH INDICATOR */
+.search-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #064e3b;
+  color: var(--search-color);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.search-indicator button {
+  background: rgba(0,0,0,0.2);
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
